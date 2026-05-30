@@ -1,0 +1,24 @@
+{
+  "name": "devtinder-namastenodejs-backend",
+  "version": "1.0.0",
+  "description": "Practicing Node JS Course",
+  "license": "ISC",
+  "author": "Gitanshu Behal",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "JavaScript",
+    "React",
+    "practice",
+    "course"
+  ],
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  }
+}
