@@ -15,13 +15,12 @@
 ## connectionRequestRouter
 
 - POST /request/send/:status/:userId
-- POST /request/review/:status/:requestId
 
 ## userRouter
 
-- GET /user/requests/received
-- GET /user/connections
+- GET /user/matches - Gets you the profiles of users you have matched with
 - GET /user/feed - Gets you the profiles of other users on platform
+- GET /user/feed/cursor - Gets you the profiles of other users on platform using cursor pagination
 
 ## health
 
