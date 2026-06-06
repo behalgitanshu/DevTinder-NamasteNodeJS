@@ -10,11 +10,13 @@ const healthRoutes = require("./routes/health");
 const authRoutes = require("./routes/auth");
 const profileRoutes = require("./routes/profile");
 const requestRoutes = require("./routes/request");
+const userRoutes = require("./routes/user");
 
 app.use("/", authRoutes);
 app.use("/profile", profileRoutes);
 app.use("/request", requestRoutes);
 app.use("/health", healthRoutes);
+app.use("/user", userRoutes);
 
 connectDB()
 	.then(() => {
