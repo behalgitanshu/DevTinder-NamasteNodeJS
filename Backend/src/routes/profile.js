@@ -1,5 +1,6 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
+const { validateProfileEditData } = require("../utils/validation");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 
@@ -20,12 +21,13 @@ router.get("/view", userAuth, async (req, res) => {
 // Edit Profile API
 router.patch("/edit", userAuth, async (req, res) => {
 	try {
+		const validation = validateProfileEditData(req.body);
+		if (!validation.valid) {
+			return res.status(400).json({ message: validation.message });
+		}
+
 		const user = req.user;
-		const { name, email } = req.body;
-
-		if (name) user.name = name;
-		if (email) user.email = email;
-
+		Object.assign(user, req.body);
 		await user.save();
 		res.status(200).json({ message: "Profile updated", user });
 	} catch (err) {
@@ -38,7 +40,16 @@ router.patch("/edit", userAuth, async (req, res) => {
 // Edit password API
 router.patch("/password", userAuth, async (req, res) => {
 	try {
-		const user = req.user;
+		const allowedFields = ["currentPassword", "newPassword"];
+		const extraFields = Object.keys(req.body).filter(
+			(key) => !allowedFields.includes(key),
+		);
+		if (extraFields.length > 0) {
+			return res.status(400).json({
+				message: `Fields not allowed: ${extraFields.join(", ")}`,
+			});
+		}
+
 		const { currentPassword, newPassword } = req.body;
 
 		if (!currentPassword || !newPassword) {
@@ -47,13 +58,13 @@ router.patch("/password", userAuth, async (req, res) => {
 				.json({ message: "Current and new password are required" });
 		}
 
-		const isMatch = await user.comparePassword(currentPassword);
+		const isMatch = await user.validatePassword(currentPassword);
 		if (!isMatch) {
 			return res.status(401).json({ message: "Current password is incorrect" });
 		}
 
-		user.password = newPassword;
-		await user.save();
+		user.password = await bcrypt.hash(newPassword, 10);
+		await user.save({ validateBeforeSave: false });
 		res.status(200).json({ message: "Password changed successfully" });
 	} catch (err) {
 		res
