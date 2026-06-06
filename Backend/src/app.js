@@ -13,7 +13,7 @@ const requestRoutes = require("./routes/request");
 
 app.use("/", authRoutes);
 app.use("/profile", profileRoutes);
-app.use("/requests", requestRoutes);
+app.use("/request", requestRoutes);
 app.use("/health", healthRoutes);
 
 connectDB()
