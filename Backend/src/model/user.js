@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
 						minSymbols: 0,
 					});
 				},
-				message: (props) =>
+				message: () =>
 					`Password is not strong enough! It must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, and one number.`,
 			},
 		},
