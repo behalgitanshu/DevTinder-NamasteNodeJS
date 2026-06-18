@@ -47,26 +47,12 @@ const Login = () => {
 								onChange={(e) => setPassword(e.target.value)}
 								required
 							/>
-							<div className="label">
-								<a href="#" className="label-text-alt link link-primary">
-									Forgot password?
-								</a>
-							</div>
 						</label>
 
 						<button type="submit" className="btn btn-primary w-full mt-2">
 							Sign In
 						</button>
 					</form>
-
-					<div className="divider">OR</div>
-
-					<p className="text-center text-sm">
-						Don&apos;t have an account?{" "}
-						<a href="#" className="link link-primary font-medium">
-							Sign up
-						</a>
-					</p>
 				</div>
 			</div>
 		</div>
