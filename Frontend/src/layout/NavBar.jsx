@@ -31,7 +31,7 @@ const NavBar = () => {
 					to="/feed"
 					className="btn btn-ghost text-xl font-bold text-primary"
 				>
-					🤝 DevTinder
+					🤝 Codemate
 				</Link>
 			</div>
 			{user && (

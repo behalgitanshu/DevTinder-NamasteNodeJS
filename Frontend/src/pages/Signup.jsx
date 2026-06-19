@@ -51,7 +51,7 @@ const Signup = () => {
 						Create Account
 					</h2>
 					<p className="text-center text-base-content/60 mb-6">
-						Join DevTinder and find your match
+						Join Codemate and find your match
 					</p>
 
 					<form onSubmit={handleSubmit} className="flex flex-col gap-4">

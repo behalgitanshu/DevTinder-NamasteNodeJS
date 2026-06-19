@@ -1,6 +1,6 @@
-# DevTinder — Frontend
+# Codemate — Frontend
 
-This is the React + Vite client for **DevTinder**, a Tinder-inspired matchmaking app. See the [root README](../README.md) for the full project overview, tech stack, and setup instructions covering both backend and frontend.
+This is the React + Vite client for **Codemate**, a Tinder-inspired matchmaking app. See the [root README](../README.md) for the full project overview, tech stack, and setup instructions covering both backend and frontend.
 
 ## Quick start
 

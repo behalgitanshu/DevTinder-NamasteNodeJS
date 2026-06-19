@@ -1,6 +1,6 @@
-# DevTinder — Backend
+# Codemate — Backend
 
-Express + MongoDB REST API for **DevTinder**. See the [root README](../README.md) for the full project overview, tech stack, and combined setup instructions.
+Express + MongoDB REST API for **Codemate**. See the [root README](../README.md) for the full project overview, tech stack, and combined setup instructions.
 
 ## Quick start
 

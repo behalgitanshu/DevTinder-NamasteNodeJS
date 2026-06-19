@@ -4,7 +4,7 @@ const Footer = () => {
 			<aside className="grid-flow-col items-center gap-3">
 				<span className="text-2xl">🤝</span>
 				<div>
-					<p className="font-semibold text-primary">DevTinder</p>
+					<p className="font-semibold text-primary">Codemate</p>
 					<p className="text-sm text-base-content/60">
 						Copyright © {new Date().getFullYear()} - All rights reserved
 					</p>

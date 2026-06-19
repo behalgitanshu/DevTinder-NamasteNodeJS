@@ -1,6 +1,6 @@
-# DevTinder
+# Codemate
 
-DevTinder is a Tinder-inspired matchmaking app, built while practising [Akshay Saini's Namaste Node.js](https://namastedev.com/) course. The course goes deep into how Node.js, Express, MongoDB and React actually work under the hood, and this project is the hands-on result — a full MERN stack application with auth, profiles, connection requests, and a swipeable feed.
+Codemate is a Tinder-inspired matchmaking app, built while practising [Akshay Saini's Namaste Node.js](https://namastedev.com/) course. The course goes deep into how Node.js, Express, MongoDB and React actually work under the hood, and this project is the hands-on result — a full MERN stack application with auth, profiles, connection requests, and a swipeable feed.
 
 ## Tech Stack
 
