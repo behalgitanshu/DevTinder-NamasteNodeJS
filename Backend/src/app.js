@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const connectDB = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -27,13 +26,4 @@ app.use("/request", requestRoutes);
 app.use("/health", healthRoutes);
 app.use("/user", userRoutes);
 
-connectDB()
-	.then(() => {
-		console.log("Connected to MongoDB");
-		app.listen(3000, () => {
-			console.log("Server is running on port 3000");
-		});
-	})
-	.catch((err) => {
-		console.error("Failed to connect to MongoDB", err);
-	});
+module.exports = app;
