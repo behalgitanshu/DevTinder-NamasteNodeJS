@@ -74,7 +74,7 @@ Accepting/rejecting incoming requests updates the request `status` to `accepted`
 
 The [`scripts/`](scripts) folder contains a generator and a runner for seeding mock users so you don't have to manually sign up accounts to test the feed/matching flow:
 
-- [`scripts/mockUsers.js`](scripts/mockUsers.js) — exports `generateMockUsers(count)`, which builds an array of randomized user objects (name, email, password, age, gender, interests, about me) using built-in name/interest pools. Emails are unique per run (`firstname.lastname<n>@codemate-mock.dev`), and passwords (`Mock<n>Pass`) satisfy the signup strength rules.
+- [`scripts/mockUsers.js`](scripts/mockUsers.js) — exports `generateMockUsers(count)`, which builds an array of randomized user objects (name, email, password, age, gender, interests, about me, profile picture) using built-in name/interest pools. Emails are unique per run (`firstname.lastname<n>@codemate-mock.dev`), passwords (`Mock<n>Pass`) satisfy the signup strength rules, and profile pictures are real headshot photos pulled from [randomuser.me](https://randomuser.me/photos) (gender-matched, free for testing/development use).
 - [`scripts/seedUsers.js`](scripts/seedUsers.js) — calls `generateMockUsers` and signs each one up via `POST /signup` against a running backend, in batches of 10 with a short delay between batches.
 
 ### Usage

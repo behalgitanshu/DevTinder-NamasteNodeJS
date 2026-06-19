@@ -29,7 +29,7 @@ router.post("/signup", async (req, res) => {
 			age: req.body.age,
 			gender: req.body.gender,
 			interests: req.body.interests,
-			profilePicture: req.body.profilePicture,
+			profilePictureURL: req.body.profilePictureURL,
 			aboutMe: req.body.aboutMe,
 		});
 		await user.save();
