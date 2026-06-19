@@ -4,6 +4,8 @@
 
 Codemate is a Tinder-inspired matchmaking app, built while practising [Akshay Saini's Namaste Node.js](https://namastedev.com/) course. The course goes deep into how Node.js, Express, MongoDB and React actually work under the hood, and this project is the hands-on result — a full MERN stack application with auth, profiles, connection requests, and a swipeable feed.
 
+The project itself is inspired by **DevTinder**, the app built as part of the Namaste Node.js course — Codemate started from that same idea and was renamed and extended from there.
+
 ## Tech Stack
 
 ### Backend
