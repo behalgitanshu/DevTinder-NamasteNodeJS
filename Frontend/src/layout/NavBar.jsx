@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
+import { clearFeed } from "../utils/feedSlice";
 
 const NavBar = () => {
 	const user = useSelector((state) => state.user);
@@ -16,6 +17,7 @@ const NavBar = () => {
 			console.error("Error logging out:", err);
 		} finally {
 			dispatch(removeUser());
+			dispatch(clearFeed());
 			navigate("/login");
 		}
 	};
