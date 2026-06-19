@@ -5,7 +5,7 @@ import { BASE_URL } from "../utils/constants";
 import { addConnections } from "../utils/connectionsSlice";
 import { parseError } from "../utils/errorHandler";
 import ErrorAlert from "../components/ErrorAlert";
-import UserCard from "../components/UserCard";
+import ChatPill from "../components/ChatPill";
 
 const Connections = () => {
 	const dispatch = useDispatch();
@@ -65,9 +65,9 @@ const Connections = () => {
 	return (
 		<div className="flex-1 py-10 px-4">
 			<h1 className="text-2xl font-bold text-center mb-8">Your Connections</h1>
-			<div className="flex flex-wrap justify-center gap-6">
+			<div className="flex flex-col gap-3 max-w-md mx-auto">
 				{connections.map((user) => (
-					<UserCard key={user._id} user={user} />
+					<ChatPill key={user._id} user={user} />
 				))}
 			</div>
 		</div>

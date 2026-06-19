@@ -85,7 +85,7 @@ const Feed = () => {
 
 	return (
 		<div className="flex flex-col items-center justify-center flex-1 py-10 gap-6">
-			<div className="relative w-full max-w-sm" style={{ height: "30rem" }}>
+			<div className="relative w-full max-w-sm aspect-[3/4]">
 				{nextUser && (
 					<div className="absolute inset-0 scale-95 opacity-70 pointer-events-none">
 						<UserCard user={nextUser} />
