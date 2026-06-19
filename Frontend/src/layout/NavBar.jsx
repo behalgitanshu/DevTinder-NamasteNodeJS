@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { clearFeed } from "../utils/feedSlice";
+import { clearConnections } from "../utils/connectionsSlice";
 
 const NavBar = () => {
 	const user = useSelector((state) => state.user);
@@ -18,6 +19,7 @@ const NavBar = () => {
 		} finally {
 			dispatch(removeUser());
 			dispatch(clearFeed());
+			dispatch(clearConnections());
 			navigate("/login");
 		}
 	};
@@ -25,9 +27,12 @@ const NavBar = () => {
 	return (
 		<div className="navbar bg-base-100 shadow-md fixed top-0 left-0 right-0 z-50">
 			<div className="flex-1">
-				<a className="btn btn-ghost text-xl font-bold text-primary">
+				<Link
+					to="/feed"
+					className="btn btn-ghost text-xl font-bold text-primary"
+				>
 					🤝 DevTinder
-				</a>
+				</Link>
 			</div>
 			{user && (
 				<div className="flex items-center gap-3 mx-4">
@@ -38,6 +43,9 @@ const NavBar = () => {
 							className="w-full h-full object-cover"
 						/>
 					</div>
+					<Link to="/connections" className="btn btn-ghost btn-sm">
+						Connections
+					</Link>
 					<Link to="/profile" className="btn btn-ghost btn-sm">
 						Profile
 					</Link>

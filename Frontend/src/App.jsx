@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
+import Connections from "./pages/Connections";
 import appStore from "./utils/appStore";
 import ErrorBoundary from "./components/ErrorBoundary";
 
@@ -63,6 +64,14 @@ function App() {
 								element={
 									<RequireAuth>
 										<Profile />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/connections"
+								element={
+									<RequireAuth>
+										<Connections />
 									</RequireAuth>
 								}
 							/>

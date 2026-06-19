@@ -47,12 +47,23 @@ userRoutes.get("/feed", userAuth, async (req, res) => {
 
 		const connections = await ConnectionRequest.find({
 			$or: [{ sender: loggedInUser._id }, { receiver: loggedInUser._id }],
-		}).select("sender receiver");
+		}).select("sender receiver status");
 
 		const excludedIds = new Set([loggedInUser._id.toString()]);
 		connections.forEach((conn) => {
-			excludedIds.add(conn.sender.toString());
-			excludedIds.add(conn.receiver.toString());
+			const senderId = conn.sender.toString();
+			const receiverId = conn.receiver.toString();
+			const isResolved = conn.status === "accepted" || conn.status === "rejected";
+
+			if (isResolved) {
+				excludedIds.add(senderId);
+				excludedIds.add(receiverId);
+			} else if (senderId === loggedInUser._id.toString()) {
+				// I already acted on this person — don't show them again.
+				// If I'm the receiver of a pending request instead, keep the
+				// sender visible so I still get a chance to react to them.
+				excludedIds.add(receiverId);
+			}
 		});
 
 		const User = require("../model/user");
@@ -80,12 +91,23 @@ userRoutes.get("/feed/cursor", userAuth, async (req, res) => {
 
 		const connections = await ConnectionRequest.find({
 			$or: [{ sender: loggedInUser._id }, { receiver: loggedInUser._id }],
-		}).select("sender receiver");
+		}).select("sender receiver status");
 
 		const excludedIds = new Set([loggedInUser._id.toString()]);
 		connections.forEach((conn) => {
-			excludedIds.add(conn.sender.toString());
-			excludedIds.add(conn.receiver.toString());
+			const senderId = conn.sender.toString();
+			const receiverId = conn.receiver.toString();
+			const isResolved = conn.status === "accepted" || conn.status === "rejected";
+
+			if (isResolved) {
+				excludedIds.add(senderId);
+				excludedIds.add(receiverId);
+			} else if (senderId === loggedInUser._id.toString()) {
+				// I already acted on this person — don't show them again.
+				// If I'm the receiver of a pending request instead, keep the
+				// sender visible so I still get a chance to react to them.
+				excludedIds.add(receiverId);
+			}
 		});
 
 		const filter = { _id: { $nin: [...excludedIds] } };

@@ -17,16 +17,28 @@ const connectionRequestSchema = new mongoose.Schema(
 			enum: ["ignore", "interested", "accepted", "rejected"],
 			message: "Status must be one of: ignore, interested, accepted, rejected",
 		},
+		// Order-independent identifier for the (sender, receiver) pair, used to
+		// enforce at most one request document per pair regardless of direction —
+		// the unique index on {sender, receiver} alone allows both directions to
+		// exist simultaneously, which races two concurrent "interested" requests
+		// into two rows instead of one resolving to "accepted".
+		pairKey: {
+			type: String,
+		},
 	},
 	{ timestamps: true },
 );
 
-connectionRequestSchema.index({ sender: 1, receiver: 1 }, { unique: true });
+connectionRequestSchema.index({ pairKey: 1 }, { unique: true });
 
 connectionRequestSchema.pre("save", async function () {
 	if (this.sender.toString() === this.receiver.toString()) {
 		throw new Error("Sender and receiver cannot be the same");
 	}
+
+	this.pairKey = [this.sender.toString(), this.receiver.toString()]
+		.sort()
+		.join("_");
 
 	// Validate Both user ID are present in DB
 	const User = mongoose.model("User");
