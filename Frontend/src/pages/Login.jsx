@@ -26,6 +26,11 @@ const Login = () => {
 					withCredentials: true,
 				},
 			);
+			if (!result.data?.user) {
+				setError("Login failed. Please try again.");
+				return;
+			}
+
 			dispatch(addUser(result.data.user));
 			navigate("/feed");
 		} catch (err) {
