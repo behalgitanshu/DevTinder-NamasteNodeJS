@@ -1,5 +1,7 @@
 # Codemate
 
+> Built primarily using Claude Code and GitHub Copilot — my own hand-written contribution to the codebase is roughly ~5%.
+
 Codemate is a Tinder-inspired matchmaking app, built while practising [Akshay Saini's Namaste Node.js](https://namastedev.com/) course. The course goes deep into how Node.js, Express, MongoDB and React actually work under the hood, and this project is the hands-on result — a full MERN stack application with auth, profiles, connection requests, and a swipeable feed.
 
 ## Tech Stack
@@ -135,15 +137,15 @@ The app will be available at `http://localhost:5173` (Vite's default port).
 
 ### 4. Seed sample data (optional)
 
-To populate the feed with sample profiles instead of testing with a single account, seed 200 mock users straight into your database via the signup API:
+To populate the feed and connections page with sample profiles instead of testing with a single account:
 
 ```bash
 cd Backend
-npm run seed:users              # signs up 200 mock users against http://localhost:3000
-# or customize: node scripts/seedUsers.js <count> <baseUrl>
+npm run seed:users              # signs up 200 mock users against http://localhost:3000 (backend must be running)
+npm run seed:connections        # creates ~300 random connection requests/matches among them
 ```
 
-This requires the backend to be running first (`npm run dev`). See [Backend/scripts](Backend/scripts) for details on the mock data and script.
+See [Backend/scripts](Backend/scripts) and the [Backend README](Backend/README.md#sample-data) for details on the mock data and scripts.
 
 ### 5. Whitelisting the frontend on the backend
 

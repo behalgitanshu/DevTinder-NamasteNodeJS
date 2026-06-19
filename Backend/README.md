@@ -76,18 +76,24 @@ The [`scripts/`](scripts) folder contains a generator and a runner for seeding m
 
 - [`scripts/mockUsers.js`](scripts/mockUsers.js) — exports `generateMockUsers(count)`, which builds an array of randomized user objects (name, email, password, age, gender, interests, about me, profile picture) using built-in name/interest pools. Emails are unique per run (`firstname.lastname<n>@codemate-mock.dev`), passwords (`Mock<n>Pass`) satisfy the signup strength rules, and profile pictures are real headshot photos pulled from [randomuser.me](https://randomuser.me/photos) (gender-matched, free for testing/development use).
 - [`scripts/seedUsers.js`](scripts/seedUsers.js) — calls `generateMockUsers` and signs each one up via `POST /signup` against a running backend, in batches of 10 with a short delay between batches.
+- [`scripts/seedConnections.js`](scripts/seedConnections.js) — connects to MongoDB directly (no HTTP) and creates random connection requests between existing mock users (matched by `@codemate-mock.dev` email), so the feed isn't the only thing populated — the Connections page has pending requests, matches, and rejections to show too.
 
 ### Usage
 
-Make sure the backend is running first (`npm run dev`), then:
+Make sure the backend is running first (`npm run dev`), then seed users, then connections (connections need users to already exist):
 
 ```bash
-npm run seed:users
-# or with custom count / target URL:
+npm run seed:users          # signs up 200 mock users
+npm run seed:connections    # creates ~300 random connection requests among them
+
+# or with custom counts / target URL:
 node scripts/seedUsers.js 200 http://localhost:3000
+node scripts/seedConnections.js 300
 ```
 
-This inserts real documents into whatever database your `MONGO_URI` points to — point it at a local/test database rather than production if you just want throwaway sample data.
+`seedConnections.js` talks to MongoDB directly via Mongoose (not the API), so the backend doesn't need to be running for that one — only `MONGO_URI` needs to be set in `.env`. Roughly half of the generated requests resolve to `accepted` (visible as matches), the rest split between `interested` (pending) and `rejected`.
+
+These scripts insert real documents into whatever database your `MONGO_URI` points to — point it at a local/test database rather than production if you just want throwaway sample data.
 
 ## Environment Variables
 
