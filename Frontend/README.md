@@ -1,16 +1,23 @@
-# React + Vite
+# DevTinder — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React + Vite client for **DevTinder**, a Tinder-inspired matchmaking app. See the [root README](../README.md) for the full project overview, tech stack, and setup instructions covering both backend and frontend.
 
-Currently, two official plugins are available:
+## Quick start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+cp .env.example .env   # set VITE_BASE_URL to your backend URL
+npm run dev
+```
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `npm run dev` — start the Vite dev server
+- `npm run build` — build for production (outputs to `dist/`)
+- `npm run preview` — preview the production build locally
+- `npm run lint` — run ESLint
+- `npm run test` — run Vitest component tests
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+React 19, Vite, Redux Toolkit, React Router, Tailwind CSS 4 + daisyUI, Axios. Full details in the [root README](../README.md#tech-stack).
