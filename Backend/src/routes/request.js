@@ -77,6 +77,7 @@ router.post("/send/:status/:receiverId", userAuth, async (req, res) => {
 			connectionRequest,
 		});
 	} catch (error) {
+		console.error("Error in /request/send:", error);
 		res.status(500).json({ message: "Internal server error" });
 	}
 });

@@ -23,9 +23,9 @@ const connectionRequestSchema = new mongoose.Schema(
 
 connectionRequestSchema.index({ sender: 1, receiver: 1 }, { unique: true });
 
-connectionRequestSchema.pre("save", async function (next) {
+connectionRequestSchema.pre("save", async function () {
 	if (this.sender.toString() === this.receiver.toString()) {
-		return next(new Error("Sender and receiver cannot be the same"));
+		throw new Error("Sender and receiver cannot be the same");
 	}
 
 	// Validate Both user ID are present in DB
@@ -34,10 +34,8 @@ connectionRequestSchema.pre("save", async function (next) {
 	const receiverExists = await User.exists({ _id: this.receiver });
 
 	if (!senderExists || !receiverExists) {
-		return next(new Error("Sender or receiver does not exist"));
+		throw new Error("Sender or receiver does not exist");
 	}
-
-	next();
 });
 
 module.exports = mongoose.model("ConnectionRequest", connectionRequestSchema);
