@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
 import { clearFeed } from "../utils/feedSlice";
@@ -46,13 +46,7 @@ const NavBar = () => {
 							className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow-lg border border-base-200"
 						>
 							<li>
-								<a className="justify-between">
-									Profile
-									<span className="badge badge-primary badge-sm">New</span>
-								</a>
-							</li>
-							<li>
-								<a>Settings</a>
+								<Link to="/profile">Profile</Link>
 							</li>
 							<li className="mt-1">
 								<a className="text-error" onClick={handleLogout}>
