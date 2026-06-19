@@ -15,6 +15,7 @@ npm run dev            # http://localhost:3000
 - `npm run dev` — start with nodemon (auto-restart)
 - `npm start` — plain node start
 - `npm test` — run Jest + Supertest tests against an in-memory MongoDB
+- `npm run seed:users` — sign up 200 mock users against a running backend (see [Sample Data](#sample-data) below)
 
 ## Authentication
 
@@ -68,6 +69,25 @@ Accepting/rejecting incoming requests updates the request `status` to `accepted`
 `interested`, `ignored`, `accepted`, `rejected`
 
 > See [`APIList.md`](APIList.md) for the original quick-reference list this table was derived from.
+
+## Sample Data
+
+The [`scripts/`](scripts) folder contains a generator and a runner for seeding mock users so you don't have to manually sign up accounts to test the feed/matching flow:
+
+- [`scripts/mockUsers.js`](scripts/mockUsers.js) — exports `generateMockUsers(count)`, which builds an array of randomized user objects (name, email, password, age, gender, interests, about me) using built-in name/interest pools. Emails are unique per run (`firstname.lastname<n>@codemate-mock.dev`), and passwords (`Mock<n>Pass`) satisfy the signup strength rules.
+- [`scripts/seedUsers.js`](scripts/seedUsers.js) — calls `generateMockUsers` and signs each one up via `POST /signup` against a running backend, in batches of 10 with a short delay between batches.
+
+### Usage
+
+Make sure the backend is running first (`npm run dev`), then:
+
+```bash
+npm run seed:users
+# or with custom count / target URL:
+node scripts/seedUsers.js 200 http://localhost:3000
+```
+
+This inserts real documents into whatever database your `MONGO_URI` points to — point it at a local/test database rather than production if you just want throwaway sample data.
 
 ## Environment Variables
 

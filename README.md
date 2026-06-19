@@ -133,11 +133,23 @@ npm run dev
 
 The app will be available at `http://localhost:5173` (Vite's default port).
 
-### 4. Whitelisting the frontend on the backend
+### 4. Seed sample data (optional)
+
+To populate the feed with sample profiles instead of testing with a single account, seed 200 mock users straight into your database via the signup API:
+
+```bash
+cd Backend
+npm run seed:users              # signs up 200 mock users against http://localhost:3000
+# or customize: node scripts/seedUsers.js <count> <baseUrl>
+```
+
+This requires the backend to be running first (`npm run dev`). See [Backend/scripts](Backend/scripts) for details on the mock data and script.
+
+### 5. Whitelisting the frontend on the backend
 
 The backend only accepts requests from the origin set in `CORS_ORIGIN` (see `Backend/.env`). Make sure this matches the URL your frontend is actually running on (e.g. `http://localhost:5173`), otherwise API calls from the browser will be blocked by CORS.
 
-### 5. Build for production (frontend)
+### 6. Build for production (frontend)
 
 ```bash
 cd Frontend
