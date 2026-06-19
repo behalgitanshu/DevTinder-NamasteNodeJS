@@ -67,7 +67,7 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			validate: {
 				validator: function (v) {
-					return validator.isURL(v);
+					return validator.isURL(v, { require_tld: false });
 				},
 				message: (props) =>
 					`${props.value} is not a valid URL! Please enter a valid profile picture URL.`,

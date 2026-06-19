@@ -23,6 +23,32 @@ const Profile = () => {
 	const [error, setError] = useState(null);
 	const [success, setSuccess] = useState(false);
 	const [saving, setSaving] = useState(false);
+	const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+	const handlePhotoChange = async (e) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+
+		setError(null);
+		setSuccess(false);
+		setUploadingPhoto(true);
+		try {
+			const formData = new FormData();
+			formData.append("photo", file);
+
+			const result = await axios.post(BASE_URL + "/profile/photo", formData, {
+				withCredentials: true,
+			});
+			dispatch(addUser(result.data.user));
+			setProfilePictureURL(result.data.user.profilePictureURL);
+			setSuccess(true);
+		} catch (err) {
+			setError(parseError(err));
+		} finally {
+			setUploadingPhoto(false);
+			e.target.value = "";
+		}
+	};
 
 	const handleSubmit = async (e) => {
 		e?.preventDefault();
@@ -65,6 +91,43 @@ const Profile = () => {
 					<p className="text-center text-base-content/60 mb-6">
 						Keep your profile up to date
 					</p>
+
+					<div className="flex flex-col items-center mb-4">
+						<div className="relative">
+							<div className="w-24 h-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden bg-base-200">
+								{profilePictureURL ? (
+									<img
+										src={profilePictureURL}
+										alt="Profile"
+										className="w-full h-full object-cover"
+									/>
+								) : (
+									<div className="w-full h-full flex items-center justify-center text-base-content/40">
+										No photo
+									</div>
+								)}
+								{uploadingPhoto && (
+									<div className="absolute inset-0 flex items-center justify-center bg-black/40">
+										<span className="loading loading-spinner loading-sm text-white" />
+									</div>
+								)}
+							</div>
+							<label
+								htmlFor="photo-upload"
+								className="btn btn-circle btn-primary btn-sm absolute bottom-0 right-0 cursor-pointer"
+							>
+								📷
+							</label>
+							<input
+								id="photo-upload"
+								type="file"
+								accept="image/jpeg,image/png,image/webp"
+								className="hidden"
+								onChange={handlePhotoChange}
+								disabled={uploadingPhoto}
+							/>
+						</div>
+					</div>
 
 					<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 						<label className="form-control w-full">

@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const connectDB = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
@@ -12,6 +13,7 @@ app.use(
 		credentials: true,
 	}),
 );
+app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 const healthRoutes = require("./routes/health");
 const authRoutes = require("./routes/auth");
