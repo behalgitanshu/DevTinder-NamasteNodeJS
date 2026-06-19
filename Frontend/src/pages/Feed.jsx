@@ -1,12 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../utils/constants";
-import { addFeed, removeUserFromFeed } from "../utils/feedSlice";
+import { addFeed, appendFeed, removeUserFromFeed } from "../utils/feedSlice";
 import { parseError } from "../utils/errorHandler";
 import ErrorAlert from "../components/ErrorAlert";
 import SwipeCard from "../components/SwipeCard";
 import UserCard from "../components/UserCard";
+
+const PAGE_SIZE = 10;
+// Fetch the next page once the stack is down to this many profiles.
+const PREFETCH_THRESHOLD = 3;
 
 const Feed = () => {
 	const dispatch = useDispatch();
@@ -14,18 +18,43 @@ const Feed = () => {
 	const [loading, setLoading] = useState(!feed);
 	const [error, setError] = useState(null);
 	const [actionId, setActionId] = useState(null);
+	const cursorRef = useRef(null);
+	const hasMoreRef = useRef(true);
+	const fetchingMoreRef = useRef(false);
 
 	const fetchFeed = useCallback(async () => {
 		try {
-			const result = await axios.get(BASE_URL + "/user/feed", {
+			const result = await axios.get(`${BASE_URL}/user/feed/cursor`, {
+				params: { limit: PAGE_SIZE },
 				withCredentials: true,
 			});
 			dispatch(addFeed(result.data.data));
+			cursorRef.current = result.data.nextCursor;
+			hasMoreRef.current = Boolean(result.data.nextCursor);
 			setError(null);
 		} catch (err) {
 			setError(parseError(err));
 		} finally {
 			setLoading(false);
+		}
+	}, [dispatch]);
+
+	const fetchMore = useCallback(async () => {
+		if (!hasMoreRef.current || fetchingMoreRef.current) return;
+		fetchingMoreRef.current = true;
+		try {
+			const result = await axios.get(`${BASE_URL}/user/feed/cursor`, {
+				params: { limit: PAGE_SIZE, cursor: cursorRef.current },
+				withCredentials: true,
+			});
+			dispatch(appendFeed(result.data.data));
+			cursorRef.current = result.data.nextCursor;
+			hasMoreRef.current = Boolean(result.data.nextCursor);
+		} catch {
+			// Silently retry on the next render once the stack runs low again.
+			hasMoreRef.current = true;
+		} finally {
+			fetchingMoreRef.current = false;
 		}
 	}, [dispatch]);
 
@@ -35,6 +64,12 @@ const Feed = () => {
 			fetchFeed();
 		}
 	}, [feed, fetchFeed]);
+
+	useEffect(() => {
+		if (feed && feed.length <= PREFETCH_THRESHOLD) {
+			fetchMore();
+		}
+	}, [feed, fetchMore]);
 
 	const handleAction = async (status, userId) => {
 		setActionId(userId);
