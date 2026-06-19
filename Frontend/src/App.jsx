@@ -1,10 +1,21 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import Body from "./layout/Body";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
-import appStore from "./utils/appStore";
-import { Provider } from "react-redux";
 import Feed from "./pages/Feed";
+import appStore from "./utils/appStore";
+
+const RequireAuth = ({ children }) => {
+	const user = useSelector((state) => state.user);
+	return user ? children : <Navigate to="/login" replace />;
+};
+
+const RedirectIfAuth = ({ children }) => {
+	const user = useSelector((state) => state.user);
+	return user ? <Navigate to="/feed" replace /> : children;
+};
 
 function App() {
 	return (
@@ -12,9 +23,38 @@ function App() {
 			<BrowserRouter basename="/">
 				<Routes>
 					<Route path="/" element={<Body />}>
-						<Route path="/login" element={<Login />} />
-						<Route path="/feed" element={<Feed />} />
-						<Route path="/profile" element={<Profile />} />
+						<Route
+							index
+							element={
+								<RequireAuth>
+									<Navigate to="/feed" replace />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="/login"
+							element={
+								<RedirectIfAuth>
+									<Login />
+								</RedirectIfAuth>
+							}
+						/>
+						<Route
+							path="/feed"
+							element={
+								<RequireAuth>
+									<Feed />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="/profile"
+							element={
+								<RequireAuth>
+									<Profile />
+								</RequireAuth>
+							}
+						/>
 						<Route path="*" element={<div>Page Not Found</div>} />
 					</Route>
 				</Routes>
