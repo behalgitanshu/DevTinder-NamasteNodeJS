@@ -1,12 +1,38 @@
 import { useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		// TODO: handle login
+		setError("");
+		try {
+			const result = await axios.post(
+				BASE_URL + "/login",
+				{
+					email,
+					password,
+				},
+				{
+					withCredentials: true,
+				},
+			);
+			dispatch(addUser(result.data.user));
+			navigate("/feed");
+		} catch (err) {
+			setError(
+				err?.response?.data || "Something went wrong. Please try again.",
+			);
+		}
 	};
 
 	return (
@@ -48,6 +74,8 @@ const Login = () => {
 								required
 							/>
 						</label>
+
+						{error && <p className="text-error text-sm text-center">{error}</p>}
 
 						<button type="submit" className="btn btn-primary w-full mt-2">
 							Sign In
