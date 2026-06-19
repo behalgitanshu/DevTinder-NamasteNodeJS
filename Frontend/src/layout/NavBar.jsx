@@ -29,7 +29,6 @@ const NavBar = () => {
 			</div>
 			{user && (
 				<div className="flex items-center gap-3 mx-4">
-					<a className="btn btn-ghost btn-sm hidden sm:flex">Browse</a>
 					<div className="dropdown dropdown-end">
 						<div
 							tabIndex={0}

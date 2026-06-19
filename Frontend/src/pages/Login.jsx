@@ -4,17 +4,18 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
+import { parseError } from "../utils/errorHandler";
+import ErrorAlert from "../components/ErrorAlert";
 
 const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [error, setError] = useState("");
+	const [error, setError] = useState(null);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setError("");
+	const performLogin = async () => {
+		setError(null);
 		try {
 			const result = await axios.post(
 				BASE_URL + "/login",
@@ -27,17 +28,24 @@ const Login = () => {
 				},
 			);
 			if (!result.data?.user) {
-				setError("Login failed. Please try again.");
+				setError({
+					type: "unknown",
+					message: "Login failed. Please try again.",
+					retryable: false,
+				});
 				return;
 			}
 
 			dispatch(addUser(result.data.user));
 			navigate("/feed");
 		} catch (err) {
-			setError(
-				err?.response?.data || "Something went wrong. Please try again.",
-			);
+			setError(parseError(err));
 		}
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		performLogin();
 	};
 
 	return (
@@ -80,7 +88,7 @@ const Login = () => {
 							/>
 						</label>
 
-						{error && <p className="text-error text-sm text-center">{error}</p>}
+						<ErrorAlert error={error} onRetry={performLogin} />
 
 						<button type="submit" className="btn btn-primary w-full mt-2">
 							Sign In

@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
 import appStore from "./utils/appStore";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const RequireAuth = ({ children }) => {
 	const user = useSelector((state) => state.user);
@@ -19,47 +20,49 @@ const RedirectIfAuth = ({ children }) => {
 
 function App() {
 	return (
-		<Provider store={appStore}>
-			<BrowserRouter basename="/">
-				<Routes>
-					<Route path="/" element={<Body />}>
-						<Route
-							index
-							element={
-								<RequireAuth>
-									<Navigate to="/feed" replace />
-								</RequireAuth>
-							}
-						/>
-						<Route
-							path="/login"
-							element={
-								<RedirectIfAuth>
-									<Login />
-								</RedirectIfAuth>
-							}
-						/>
-						<Route
-							path="/feed"
-							element={
-								<RequireAuth>
-									<Feed />
-								</RequireAuth>
-							}
-						/>
-						<Route
-							path="/profile"
-							element={
-								<RequireAuth>
-									<Profile />
-								</RequireAuth>
-							}
-						/>
-						<Route path="*" element={<div>Page Not Found</div>} />
-					</Route>
-				</Routes>
-			</BrowserRouter>
-		</Provider>
+		<ErrorBoundary>
+			<Provider store={appStore}>
+				<BrowserRouter basename="/">
+					<Routes>
+						<Route path="/" element={<Body />}>
+							<Route
+								index
+								element={
+									<RequireAuth>
+										<Navigate to="/feed" replace />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/login"
+								element={
+									<RedirectIfAuth>
+										<Login />
+									</RedirectIfAuth>
+								}
+							/>
+							<Route
+								path="/feed"
+								element={
+									<RequireAuth>
+										<Feed />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/profile"
+								element={
+									<RequireAuth>
+										<Profile />
+									</RequireAuth>
+								}
+							/>
+							<Route path="*" element={<div>Page Not Found</div>} />
+						</Route>
+					</Routes>
+				</BrowserRouter>
+			</Provider>
+		</ErrorBoundary>
 	);
 }
 

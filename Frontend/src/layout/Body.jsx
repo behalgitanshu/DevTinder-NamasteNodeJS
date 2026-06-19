@@ -6,11 +6,14 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
+import { parseError } from "../utils/errorHandler";
+import ErrorAlert from "../components/ErrorAlert";
 
 const Body = () => {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
 	const [loading, setLoading] = React.useState(!user);
+	const [error, setError] = React.useState(null);
 
 	const fetchUser = React.useCallback(async () => {
 		try {
@@ -18,8 +21,13 @@ const Body = () => {
 				withCredentials: true,
 			});
 			dispatch(addUser(result.data.user));
-		} catch {
+			setError(null);
+		} catch (err) {
 			dispatch(removeUser());
+			const parsed = parseError(err);
+			if (parsed.retryable) {
+				setError(parsed);
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -27,6 +35,9 @@ const Body = () => {
 
 	React.useEffect(() => {
 		if (!user) {
+			// One-time auth check on mount; fetchUser's setState calls all run
+			// after an await, not synchronously within this effect.
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			fetchUser();
 		}
 	}, [user, fetchUser]);
@@ -35,6 +46,16 @@ const Body = () => {
 		return (
 			<div className="flex items-center justify-center min-h-screen">
 				<span className="loading loading-spinner loading-lg text-primary" />
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div className="flex items-center justify-center min-h-screen bg-base-200 px-4">
+				<div className="w-full max-w-md">
+					<ErrorAlert error={error} onRetry={fetchUser} />
+				</div>
 			</div>
 		);
 	}
