@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Provider } from "react-redux";
 import Body from "./layout/Body";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
 import appStore from "./utils/appStore";
@@ -38,6 +39,14 @@ function App() {
 								element={
 									<RedirectIfAuth>
 										<Login />
+									</RedirectIfAuth>
+								}
+							/>
+							<Route
+								path="/signup"
+								element={
+									<RedirectIfAuth>
+										<Signup />
 									</RedirectIfAuth>
 								}
 							/>

@@ -31,30 +31,23 @@ const NavBar = () => {
 			</div>
 			{user && (
 				<div className="flex items-center gap-3 mx-4">
-					<div className="dropdown dropdown-end">
-						<div
-							tabIndex={0}
-							role="button"
-							className="btn btn-ghost btn-circle avatar"
-						>
-							<div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-								<img alt={user.firstName} src={user.profilePictureURL} />
-							</div>
-						</div>
-						<ul
-							tabIndex="-1"
-							className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow-lg border border-base-200"
-						>
-							<li>
-								<Link to="/profile">Profile</Link>
-							</li>
-							<li className="mt-1">
-								<a className="text-error" onClick={handleLogout}>
-									Logout
-								</a>
-							</li>
-						</ul>
+					<div className="w-10 h-10 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2">
+						<img
+							alt={user.firstName}
+							src={user.profilePictureURL}
+							className="w-full h-full object-cover"
+						/>
 					</div>
+					<Link to="/profile" className="btn btn-ghost btn-sm">
+						Profile
+					</Link>
+					<button
+						type="button"
+						className="btn btn-ghost btn-sm text-error"
+						onClick={handleLogout}
+					>
+						Logout
+					</button>
 				</div>
 			)}
 		</div>

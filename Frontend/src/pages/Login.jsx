@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { parseError } from "../utils/errorHandler";
 import ErrorAlert from "../components/ErrorAlert";
@@ -13,6 +13,8 @@ const Login = () => {
 	const [error, setError] = useState(null);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+	const signupSuccess = location.state?.signupSuccess;
 
 	const performLogin = async () => {
 		setError(null);
@@ -59,6 +61,12 @@ const Login = () => {
 						Sign in to your account
 					</p>
 
+					{signupSuccess && (
+						<div className="alert alert-success text-sm mb-4">
+							Account created successfully. Please sign in.
+						</div>
+					)}
+
 					<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 						<label className="form-control w-full">
 							<div className="label">
@@ -94,6 +102,13 @@ const Login = () => {
 							Sign In
 						</button>
 					</form>
+
+					<p className="text-center text-sm mt-4">
+						Don&apos;t have an account?{" "}
+						<Link to="/signup" className="link link-primary font-medium">
+							Sign up
+						</Link>
+					</p>
 				</div>
 			</div>
 		</div>
