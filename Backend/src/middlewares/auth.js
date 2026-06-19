@@ -10,7 +10,7 @@ const userAuth = async (req, res, next) => {
 		}
 
 		// Validate the token
-		const decodedMessage = jwt.verify(token, "REDACTED_JWT_SECRET");
+		const decodedMessage = jwt.verify(token, process.env.JWT_SECRET);
 		if (!decodedMessage) {
 			return res.status(401).json({ message: "Unauthorized" });
 		}

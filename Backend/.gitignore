@@ -1,3 +1,5 @@
 node_modules/*
 uploads/profile-pictures/*
 !uploads/profile-pictures/.gitkeep
+.env
+!.env.example
