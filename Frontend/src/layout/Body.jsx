@@ -1,6 +1,6 @@
 import React from "react";
 import NavBar from "./NavBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Footer from "./Footer";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
@@ -11,6 +11,8 @@ import ErrorAlert from "../components/ErrorAlert";
 
 const Body = () => {
 	const dispatch = useDispatch();
+	const location = useLocation();
+	const isChatRoute = location.pathname.startsWith("/chat/");
 	const user = useSelector((state) => state.user);
 	const [loading, setLoading] = React.useState(!user);
 	const [error, setError] = React.useState(null);
@@ -63,10 +65,16 @@ const Body = () => {
 	return (
 		<div className="flex flex-col min-h-screen">
 			<NavBar />
-			<main className="flex-1 pt-16 flex flex-col">
+			<main
+				className={
+					isChatRoute
+						? "h-screen pt-16 flex flex-col overflow-hidden"
+						: "flex-1 pt-16 flex flex-col"
+				}
+			>
 				<Outlet />
 			</main>
-			<Footer />
+			{!isChatRoute && <Footer />}
 		</div>
 	);
 };
