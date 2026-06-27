@@ -10,9 +10,37 @@ import ErrorAlert from "../components/ErrorAlert";
 
 const ChatWindow = ({ toUserId, chatUser, user, onBack }) => {
 	const [messages, setMessages] = useState([]);
+	const [historyLoading, setHistoryLoading] = useState(true);
+	const [historyError, setHistoryError] = useState(null);
 	const [draft, setDraft] = useState("");
 	const messagesEndRef = useRef(null);
 	const room = getChatRoomId(user._id, toUserId);
+
+	const fetchHistory = useCallback(async () => {
+		setHistoryLoading(true);
+		try {
+			const result = await axios.get(`${BASE_URL}/chat/${toUserId}`, {
+				withCredentials: true,
+			});
+			setMessages(
+				result.data.messages.map((m) => ({
+					id: m._id,
+					text: m.text,
+					senderId: m.senderId,
+				})),
+			);
+			setHistoryError(null);
+		} catch (err) {
+			setHistoryError(parseError(err));
+		} finally {
+			setHistoryLoading(false);
+		}
+	}, [toUserId]);
+
+	useEffect(() => {
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		fetchHistory();
+	}, [fetchHistory]);
 
 	useEffect(() => {
 		socket.emit("joinRoom", room);
@@ -81,7 +109,13 @@ const ChatWindow = ({ toUserId, chatUser, user, onBack }) => {
 			</header>
 
 			<div className="flex-1 overflow-y-auto px-4 py-4 min-h-0">
-				{messages.length === 0 ? (
+				{historyLoading ? (
+					<div className="h-full flex items-center justify-center">
+						<span className="loading loading-spinner loading-md text-primary" />
+					</div>
+				) : historyError ? (
+					<ErrorAlert error={historyError} onRetry={fetchHistory} />
+				) : messages.length === 0 ? (
 					<div className="h-full flex items-center justify-center">
 						<p className="text-base-content/50 text-sm text-center">
 							No messages yet. Say hi to {chatUser.firstName}! 👋

@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const app = require("./app");
 const connectDB = require("./config/database");
+const Chat = require("./model/chat");
 const socket = require("socket.io");
 const http = require("http");
 const PORT = process.env.PORT || 3000;
@@ -32,8 +33,29 @@ const initializeSocket = () => {
 		});
 
 		// handle send message
-		socket.on("sendMessage", (message) => {
-			io.to(message.room).emit("receiveMessage", message);
+		socket.on("sendMessage", async (message) => {
+			try {
+				const { room, text, senderId } = message;
+				if (!room || !text || !senderId) return;
+
+				// roomId is the participant pair, sorted and joined with "_"
+				// (see Chat.getRoomId / Frontend's getChatRoomId) — split it back
+				// out to get the participants for a chat we haven't seen before.
+				const participants = room.split("_");
+				if (participants.length !== 2) return;
+
+				let chat = await Chat.findOne({ roomId: room });
+				if (!chat) {
+					chat = new Chat({ participants, roomId: room });
+				}
+
+				chat.messages.push({ senderId, text });
+				await chat.save();
+
+				io.to(room).emit("receiveMessage", message);
+			} catch (err) {
+				console.error("Error saving message:", err);
+			}
 		});
 	});
 
