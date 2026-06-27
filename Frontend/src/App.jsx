@@ -9,6 +9,7 @@ import Feed from "./pages/Feed";
 import Connections from "./pages/Connections";
 import appStore from "./utils/appStore";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Chat from "./pages/Chat";
 
 const RequireAuth = ({ children }) => {
 	const user = useSelector((state) => state.user);
@@ -72,6 +73,14 @@ function App() {
 								element={
 									<RequireAuth>
 										<Connections />
+									</RequireAuth>
+								}
+							/>
+							<Route
+								path="/chat/:toUserId"
+								element={
+									<RequireAuth>
+										<Chat />
 									</RequireAuth>
 								}
 							/>

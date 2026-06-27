@@ -137,6 +137,8 @@ npm run dev
 
 The app will be available at `http://localhost:5173` (Vite's default port).
 
+> **Tip:** once both `Backend/.env` and `Frontend/.env` are set up, you can start both servers with one command from `Frontend/`: `npm run dev:all` (requires `Backend/node_modules` to already be installed).
+
 ### 4. Seed sample data (optional)
 
 To populate the feed and connections page with sample profiles instead of testing with a single account:
